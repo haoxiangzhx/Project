@@ -101,14 +101,183 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Show Movie Information</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+<?php 
+    include 'db.php';
+    $mid = $_GET["mid"];
 
+    $midErr = "";
+    $error = false;
+    if (isset($_GET["submit"])) {
+        if (!$mid) {
+            $midErr = "<p class=\"text-danger\">* Please choose a movie</p>";
+            $error = true;
+        }
+    }
+ ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Show Movie Information
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label>Movie</label>
+                                            <select class="form-control" name="mid">
+                                            <option selected disabled>Choose here</option>
+<?php 
+    $rs = $db->query("select id, title, year from Movie order by title asc;");
+    while($row = $rs->fetch_assoc()) 
+    {
+        $id = $row["id"];
+        $title = $row["title"];
+        $year = $row["year"];
+        echo "<option value=\"".$id."\">".$title."(".$year.")</option>";
+    }
+ ?>
+                                            </select>
+                                            <span class="error"><?php echo $midErr;?></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
+                                        <button type="reset" class="btn btn-default">Reset Button</button>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+<?php 
+    if (isset($_GET["submit"])) {
+        if (!$error)
+        {
+            function add_quotes($str)
+            {
+                return "\"".$str."\"";
+            }
+
+            $query = "select * from Movie where id = ".$mid.";";
+            $rs = $db->query($query);
+            // $row = $rs->fetch_assoc();
+            // $title = $row['title'];
+            // $year = $row['year'];
+            // $rating = $row['rating'];
+            // $company = $row['company'];
+            $fields = $rs->fetch_fields();
+
+            echo "<table border=\"1\">";
+            echo "<tr align=\"center\">";
+            foreach ($fields as $f)
+            {
+                echo "<td><b> ".$f->name." </b></td>";
+            }
+            echo "</tr>";
+
+            while($row = $rs->fetch_assoc()) 
+            {
+                echo "<tr align=\"center\">";
+                foreach ($fields as $f)
+                {
+                    $val = $row[$f->name];
+                    if (!$val)
+                        $val = "N/A";
+                    echo "<td> ".$val."</td>";
+                }
+                echo "</tr>";
+            }
+
+            echo "</table>";
+        }
+    }
+ ?>
+                </div>
+                <!-- /.col-lg-12 -->
+<?php 
+    if (isset($_GET["submit"])) {
+        if (!$error)
+        {
+            $part1 = "<div class=\"col-lg-12\">
+                    <div class=\"panel panel-default\">
+                        <div class=\"panel-heading\">
+                            Actor/Actress Information
+                        </div>
+                        <div class=\"panel-body\">
+                            <div class=\"table-responsive\">
+                                <table class=\"table\">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+            $part2 = "</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
+            $query = "select last, first, role from Actor, MovieActor where mid = ".$mid." and id = aid order by last, first;";
+            $rs = $db->query($query);
+
+            echo $part1;
+            $i = 1;
+            while($row = $rs->fetch_assoc()) 
+            {
+                $last = $row['last'];
+                $first = $row['first'];
+                $role = $row['role'];
+                echo "<tr><td>".$i++."</td><td>".$first." ".$last."</td><td>".$role."</td></tr>";
+            }
+            echo $part2;
+        }
+    }
+ ?>
+<?php 
+    if (isset($_GET["submit"])) {
+        if (!$error)
+        {
+            $part1 = "<div class=\"col-lg-4\">
+                    <div class=\"panel panel-info\">
+                        <div class=\"panel-heading\">";
+            $part2 = " </div>
+                                <div class=\"panel-body\">
+                                    <p>";
+            $part3 = "</p>
+                                </div>
+                                <div class=\"panel-footer\">
+                                <p class=\"text-right\">";
+            $part4 = "</p></div>
+                            </div>
+                        </div>";
+            $query = "select name, time, comment from Review where mid = ".$mid.";";
+            $rs = $db->query($query);
+
+            while($row = $rs->fetch_assoc()) 
+            {
+                $name = $row['name'];
+                $time = $row['time'];
+                $comment = $row['comment'];
+                echo $part1.$time.$part2.$comment.$part3."--".$name.$part4;
+            }
+
+        }
+    }
+ ?>
+            </div>
+            <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
 
