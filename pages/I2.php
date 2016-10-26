@@ -101,10 +101,90 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Add new Movie</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Add new Movie
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label>Title</label>
+                                            <input class="form-control" name="title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Company</label>
+                                            <input class="form-control" name="company">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Year</label>
+                                            <input class="form-control" name="year">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>MPAA Rating</label>
+                                            <select class="form-control" name="rate">
+                                                <option value="G">G</option>
+                                                <option value="NC-17">NC-17</option>
+                                                <option value="PG">PG</option>
+                                                <option value="PG-13">PG-13</option>
+                                                <option value="R">R</option>
+                                                <option value="surrendere">surrendere</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >Genre:</label>
+                                            <input type="checkbox" name="genre[]" value="Action">Action</input>
+                                            <input type="checkbox" name="genre[]" value="Adult">Adult</input>
+                                            <input type="checkbox" name="genre[]" value="Adventure">Adventure</input>
+                                            <input type="checkbox" name="genre[]" value="Animation">Animation</input>
+                                            <input type="checkbox" name="genre[]" value="Comedy">Comedy</input>
+                                            <input type="checkbox" name="genre[]" value="Crime">Crime</input>
+                                            <input type="checkbox" name="genre[]" value="Documentary">Documentary</input>
+                                            <input type="checkbox" name="genre[]" value="Drama">Drama</input>
+                                            <input type="checkbox" name="genre[]" value="Family">Family</input>
+                                            <input type="checkbox" name="genre[]" value="Fantasy">Fantasy</input>
+                                            <input type="checkbox" name="genre[]" value="Horror">Horror</input>
+                                            <input type="checkbox" name="genre[]" value="Musical">Musical</input>
+                                            <input type="checkbox" name="genre[]" value="Mystery">Mystery</input>
+                                            <input type="checkbox" name="genre[]" value="Romance">Romance</input>
+                                            <input type="checkbox" name="genre[]" value="Sci-Fi">Sci-Fi</input>
+                                            <input type="checkbox" name="genre[]" value="Short">Short</input>
+                                            <input type="checkbox" name="genre[]" value="Thriller">Thriller</input>
+                                            <input type="checkbox" name="genre[]" value="War">War</input>
+                                            <input type="checkbox" name="genre[]" value="Western">Western</input>
+                                        </div>
+                                        <button type="submit" class="btn btn-default">Add!</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.panel-body-->
+<?php
+    include 'db.php';
+    $title=$_GET["title"];
+    $company=$_GET["company"];
+    $year=$_GET["year"];
+    $rate=$_GET["rate"];
+    $genre=$_GET["genre"];
+
+    echo $title." ".$company." ".$year." ".$rate." ";
+    foreach ($genre as $key) {
+        echo $key."<br />";
+    }
+?>
+
+                    </div> 
+                    <!--/.panel panel-default-->
+                </div>
+                <!-- /.col-lg-12 -->
+            <div>
 
         </div>
         <!-- /#page-wrapper -->
