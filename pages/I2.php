@@ -101,10 +101,92 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Add new Movie</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Add new Movie
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label>Title:</label>
+                                            <input class="form-control" name="title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Company:</label>
+                                            <input class="form-control" name="company">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Year:</label>
+                                            <input class="form-control" name="year">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>MPAA Rating:</label>
+                                            <select class="form-control" name="rate">
+                                                <option value="G">G</option>
+                                                <option value="NC-17">NC-17</option>
+                                                <option value="PG">PG</option>
+                                                <option value="PG-13">PG-13</option>
+                                                <option value="R">R</option>
+                                                <option value="surrendere">surrendere</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Genre:</label>
+                                            <select multiple class="form-control" name="genre[]">
+                                                <option value="Action">Action</option>
+                                                <option value="Adult">Adult</option>
+                                                <option value="Adventure">Adventure</option>
+                                                <option value="Animation">Animation</option>
+                                                <option value="Comedy">Comedy</option>
+                                                <option value="Crime">Crime</option>
+                                                <option value="Documentary">Documentary</option>
+                                                <option value="Drama">Drama</option>
+                                                <option value="Family">Family</option>
+                                                <option value="Fantasy">Fantasy</option>
+                                                <option value="Horror">Horror</option>
+                                                <option value="Musical">Musical</option>
+                                                <option value="Mystery">Mystery</option>
+                                                <option value="Romance">Romance</option>
+                                                <option value="Sci-Fi">Sci-Fi</option>
+                                                <option value="Short">Short</option>
+                                                <option value="Thriller">Thriller</option>
+                                                <option value="War">War</option>
+                                                <option value="Western">Western</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-default">Add!</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.panel-body-->
+<?php
+    include 'db.php';
+    $title=$_GET["title"];
+    $company=$_GET["company"];
+    $year=$_GET["year"];
+    $rate=$_GET["rate"];
+    $genre=$_GET["genre"];
+
+    echo $title." ".$company." ".$year." ".$rate." ";
+    foreach ($genre as $key) {
+        echo $key."<br />";
+    }
+?>
+
+                    </div> 
+                    <!--/.panel panel-default-->
+                </div>
+                <!-- /.col-lg-12 -->
+            <div>
 
         </div>
         <!-- /#page-wrapper -->
