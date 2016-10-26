@@ -118,36 +118,36 @@
                                         <div class="form-group">
                                             <label>Occupation</label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>Actor
+                                                <input type="radio" name="occupation" value="actor">Actor
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">Director
+                                                <input type="radio" name="occupation" value="director">Director
                                             </label>
                                         </div>
                                         <div class="form-group">
                                             <label>First Name</label>
-                                            <input class="form-control">
+                                            <input class="form-control" name="first">
                                         </div>
                                         <div class="form-group">
                                             <label>Last Name</label>
-                                            <input class="form-control">
+                                            <input class="form-control" name="last">
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>Male
+                                                <input type="radio" name="sex" value="male">Male
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">Female
+                                                <input type="radio" name="sex" value="female">Female
                                             </label>
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth(YYYY-MM-DD)</label>
-                                            <input class="form-control">
+                                            <input class="form-control" name="dob">
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Death(YYYY-MM-DD)</label>
-                                            <input class="form-control">
+                                            <input class="form-control" name="dod">
                                             <p class="help-block">Please leave blank if alive.</p>
                                         </div>
                                         <button type="submit" class="btn btn-default">Submit Button</button>
@@ -159,6 +159,61 @@
                             <!-- /.row (nested) -->
                         </div>
                         <!-- /.panel-body -->
+<?php 
+    include 'db.php';
+    $first = $_GET["first"];
+    $last = $_GET["last"];
+    $occupation = $_GET["occupation"];
+    $sex = $_GET["sex"];
+    $dob = $_GET["dob"];
+    $dod = $_GET["dod"];
+
+    echo $first." ".$last." ".$occupation." ".$sex." ";
+
+    // if ($occupation == "actor")
+    // {
+    //     $query = "select * from Actor where first = \"".$first."\";";
+    // }
+    // else
+    // {
+    //     $query = "select * from Director where first = \"".$first."\";";
+    // }
+
+    // if ($query) 
+    // {
+    //     $rs = $db->query($query);
+    //     $fields = $rs->fetch_fields();
+
+    //     echo "<table border=\"1\">";
+    //     echo "<tr align=\"center\">";
+    //     foreach ($fields as $f)
+    //     {
+    //         echo "<td><b> ".$f->name." </b></td>";
+    //     }
+    //     echo "</tr>";
+
+    //     while($row = $rs->fetch_assoc()) 
+    //     {
+    //         echo "<tr align=\"center\">";
+    //         foreach ($fields as $f)
+    //         {
+    //             $val = $row[$f->name];
+    //             if (!$val)
+    //                 $val = "N/A";
+    //             echo "<td> ".$val."</td>";
+    //         }
+    //         echo "</tr>";
+    //     }
+
+    //     echo "</table>";
+    //     $rs->free();
+    // }
+    // else
+    // {
+    //     echo "error";
+    // }
+
+ ?>
                     </div>
                     <!-- /.panel -->
                 </div>
