@@ -101,14 +101,125 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Add Review to Movie</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+<?php 
+    include 'db.php';
+    $name = $_GET["name"];
+    $mid = $_GET["mid"];
+    $rating = $_GET["rating"];
+    $comment = $_GET["comment"];
 
+    $nameErr = $midErr = $ratingErr = $commentErr = "";
+    $error = false;
+    if (isset($_GET["submit"])) {
+        if (!$name) {
+            $nameErr = "<p class=\"text-danger\">* Your name is required</p>";
+            $error = true;
+        }
+        if (!$mid) {
+            $midErr = "<p class=\"text-danger\">* Please choose a movie</p>";
+            $error = true;
+        }
+        if (!$rating) {
+            $ratingErr = "<p class=\"text-danger\">* Rating is required</p>";
+            $error = true;
+        }
+        if (!$comment) {
+            $commentErr = "<p class=\"text-danger\">* Comment is required</p>";
+            $error = true;
+        }
+
+        if (!$error)
+        {
+            echo "<div class=\"alert alert-success\"><strong>Success!</strong> Your review has been added to the database.</div>";
+
+            function add_quotes($str)
+            {
+                return "\"".$str."\"";
+            }
+
+            $query = "insert into Review values(".add_quotes($name).", now(), ".$mid.", ".$rating.", ".add_quotes($comment).");";
+
+            $rs = $db->query($query);
+        }
+    }
+ ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Add Review to Movie
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label>Please select a movie you'd like to review: </label>
+                                            <select class="form-control" name="mid">
+                                            <option selected disabled>Choose here</option>
+<?php 
+    $rs = $db->query("select id, title, year from Movie order by title asc;");
+    while($row = $rs->fetch_assoc()) 
+    {
+        $id = $row["id"];
+        $title = $row["title"];
+        $year = $row["year"];
+        echo "<option value=\"".$id."\">".$title."(".$year.")</option>";
+    }
+ ?>
+                                            </select>
+                                            <span class="error"><?php echo $midErr;?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Rating</label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="rating" value="1">1
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="rating" value="2">2
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="rating" value="3">3
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="rating" value="4">4
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="rating" value="5">5
+                                            </label>
+                                            <span class="error"><?php echo $ratingErr;?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Review</label>
+                                            <textarea class="form-control" rows="5" name="comment"></textarea>
+                                            <span class="error"><?php echo $commentErr;?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Your Name</label>
+                                            <input class="form-control" name="name">
+                                            <span class="error"><?php echo $nameErr;?></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
+                                        <button type="reset" class="btn btn-default">Reset Button</button>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
 

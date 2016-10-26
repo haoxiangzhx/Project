@@ -167,8 +167,6 @@
             $rs = $db->query($query);
         }
     }
-
-
  ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
