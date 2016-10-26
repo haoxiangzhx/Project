@@ -107,6 +107,77 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
+<?php
+    include 'db.php';
+    $title=$_GET["title"];
+    $company=$_GET["company"];
+    $year=$_GET["year"];
+    $rate=$_GET["rate"];
+
+    $titleErr = $companyErr = $yearErr = $rateErr = "";
+    $error = false;
+    if(isset($_GET["submit"])){
+        if(!$title){
+            $titleErr = "<p class=\"text-danger\">* Title is required</p>";
+            $error = true;
+        }
+        if(!$company){
+            $companyErr = "<p class=\"text-danger\">* Company name is required</p>";
+            $error = true;
+        }
+        if(!$year){
+            $yearErr = "<p class=\"text-danger\">* Year is required</p>";
+            $error = true;
+        }
+        if(!$rate){
+            $rateErr = "<p class=\"text-danger\">* MPAA Rating is required</p>";
+            $error = true;
+        }
+
+        if(!$error){
+            echo "<div class=\"alert alert-success\"><strong>Success!</strong> ".$title." has been added to the database.</div>";
+
+            $db->query("update MaxMovieID set id = id+1");
+            $res=$db->query("select * from MaxMovieID");
+            $row=$res->fetch_assoc();
+            $id=$row['id'];
+
+            function add_quotes($str){
+                return "\"".$str."\"";
+            }
+
+            $query = "insert into Movie values(".$id.", ".add_quotes($title).", ".$year.", ".add_quotes($rate).", ".add_quotes($company).");";
+            //echo $query;
+            $rs = $db->query($query);
+
+            if($_GET["genre"]){
+                foreach ($_GET["genre"] as $g) {
+                    $db->query("insert into MovieGenre values(".$id.", ".add_quotes($g).");");
+                }
+            }                    
+        }
+    }
+    //get genres
+    // $genres=array();
+    // if(isset($_GET["genre"])){
+    //     foreach ($_GET["genre"] as $g) {
+    //         array_push($genres, $g);
+    //     }
+    // }
+
+    // $midQuery = "SELECT id FROM MaxMovieID";
+    // $midGet = $db->query($midQuery);
+    // $midFinal = $midGet->fetch_row($midGet);    
+    // $mid = $midFinal[0];
+    // print_r($midGet);
+    // print_r($genres);
+
+    // echo $title." ".$company." ".$year." ".$rate." ";
+    // foreach ($genre as $key) {
+    //     echo $key."<br />";
+    // }
+
+?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Add new Movie
@@ -118,14 +189,17 @@
                                         <div class="form-group">
                                             <label>Title:</label>
                                             <input class="form-control" name="title">
+                                            <span class="error"><?php echo $titleErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Company:</label>
                                             <input class="form-control" name="company">
+                                            <span class="error"><?php echo $companyErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Year:</label>
                                             <input class="form-control" name="year">
+                                            <span class="error"><?php echo $yearErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>MPAA Rating:</label>
@@ -137,6 +211,7 @@
                                                 <option value="R">R</option>
                                                 <option value="surrendere">surrendere</option>
                                             </select>
+                                            <span class="error"><?php echo $rateErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Genre:</label>
@@ -162,25 +237,12 @@
                                                 <option value="Western">Western</option>
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-default">Add!</button>
+                                        <button type="submit" class="btn btn-default" name="submit">Add!</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <!--/.panel-body-->
-<?php
-    include 'db.php';
-    $title=$_GET["title"];
-    $company=$_GET["company"];
-    $year=$_GET["year"];
-    $rate=$_GET["rate"];
-    $genre=$_GET["genre"];
-
-    echo $title." ".$company." ".$year." ".$rate." ";
-    foreach ($genre as $key) {
-        echo $key."<br />";
-    }
-?>
 
                     </div> 
                     <!--/.panel panel-default-->
