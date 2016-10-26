@@ -107,6 +107,69 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
+<?php 
+    include 'db.php';
+    $first = $_GET["first"];
+    $last = $_GET["last"];
+    $occupation = $_GET["occupation"];
+    $sex = $_GET["sex"];
+    $dob = $_GET["dob"];
+    $dod = $_GET["dod"];
+
+    $firstErr = $lastErr = $occupationErr = $sexErr = $dobErr = "";
+    $error = false;
+    if (isset($_GET["submit"])) {
+        if (!$first) {
+            $firstErr = "<p class=\"text-danger\">* First name is required</p>";
+            $error = true;
+        }
+        if (!$last) {
+            $lastErr = "<p class=\"text-danger\">* Last name is required</p>";
+            $error = true;
+        }
+        if (!$occupation) {
+            $occupationErr = "<p class=\"text-danger\">* Occupation is required</p>";
+            $error = true;
+        }
+        if (!$sex) {
+            $sexErr = "<p class=\"text-danger\">* Gender is required</p>";
+            $error = true;
+        }
+        if (!$dob) {
+            $dobErr = "<p class=\"text-danger\">* Date of birth is required</p>";
+            $error = true;
+        }
+
+        if (!$error)
+        {
+            echo "<div class=\"alert alert-success\"><strong>Success!</strong> ".$first." ".$last." has been added to the database.</div>";
+
+            $db->query("update MaxPersonID set id = id+1;");
+            $rs = $db->query("select * from MaxPersonID;");
+            $row = $rs->fetch_assoc();
+            $id = $row['id'];
+
+            function add_quotes($str)
+            {
+                return "\"".$str."\"";
+            }
+
+            $query = "insert into ".$occupation." values(".$id.", ".add_quotes($last).", ".add_quotes($first).", ".add_quotes($sex).", ".add_quotes($dob).", ";
+            if ($dod != "")
+            {
+                echo "$dod";
+                $query .= add_quotes($dod).");";
+            }
+            else
+            {
+                $query .= "null);";
+            }
+            $rs = $db->query($query);
+        }
+    }
+
+
+ ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Add Actor/Director
@@ -118,39 +181,44 @@
                                         <div class="form-group">
                                             <label>Occupation</label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="occupation" value="actor">Actor
+                                                <input type="radio" name="occupation" value="Actor">Actor
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="occupation" value="director">Director
+                                                <input type="radio" name="occupation" value="Director">Director
                                             </label>
+                                            <span class="error"><?php echo $occupationErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>First Name</label>
                                             <input class="form-control" name="first">
+                                            <span class="error"><?php echo $firstErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Last Name</label>
                                             <input class="form-control" name="last">
+                                            <span class="error"><?php echo $lastErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="sex" value="male">Male
+                                                <input type="radio" name="sex" value="Male">Male
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="sex" value="female">Female
+                                                <input type="radio" name="sex" value="Female">Female
                                             </label>
+                                            <span class="error"><?php echo $sexErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth(YYYY-MM-DD)</label>
                                             <input class="form-control" name="dob">
+                                            <span class="error"><?php echo $dobErr;?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Death(YYYY-MM-DD)</label>
                                             <input class="form-control" name="dod">
                                             <p class="help-block">Please leave blank if alive.</p>
                                         </div>
-                                        <button type="submit" class="btn btn-default">Submit Button</button>
+                                        <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
                                         <button type="reset" class="btn btn-default">Reset Button</button>
                                     </form>
                                 </div>
@@ -159,61 +227,6 @@
                             <!-- /.row (nested) -->
                         </div>
                         <!-- /.panel-body -->
-<?php 
-    include 'db.php';
-    $first = $_GET["first"];
-    $last = $_GET["last"];
-    $occupation = $_GET["occupation"];
-    $sex = $_GET["sex"];
-    $dob = $_GET["dob"];
-    $dod = $_GET["dod"];
-
-    echo $first." ".$last." ".$occupation." ".$sex." ";
-
-    // if ($occupation == "actor")
-    // {
-    //     $query = "select * from Actor where first = \"".$first."\";";
-    // }
-    // else
-    // {
-    //     $query = "select * from Director where first = \"".$first."\";";
-    // }
-
-    // if ($query) 
-    // {
-    //     $rs = $db->query($query);
-    //     $fields = $rs->fetch_fields();
-
-    //     echo "<table border=\"1\">";
-    //     echo "<tr align=\"center\">";
-    //     foreach ($fields as $f)
-    //     {
-    //         echo "<td><b> ".$f->name." </b></td>";
-    //     }
-    //     echo "</tr>";
-
-    //     while($row = $rs->fetch_assoc()) 
-    //     {
-    //         echo "<tr align=\"center\">";
-    //         foreach ($fields as $f)
-    //         {
-    //             $val = $row[$f->name];
-    //             if (!$val)
-    //                 $val = "N/A";
-    //             echo "<td> ".$val."</td>";
-    //         }
-    //         echo "</tr>";
-    //     }
-
-    //     echo "</table>";
-    //     $rs->free();
-    // }
-    // else
-    // {
-    //     echo "error";
-    // }
-
- ?>
                     </div>
                     <!-- /.panel -->
                 </div>
