@@ -237,7 +237,8 @@
                                                 <option value="Western">Western</option>
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-default" name="submit">Add!</button>
+                                        <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
+                                        <button type="reset" class="btn btn-default">Reset Button</button>
                                     </form>
                                 </div>
                             </div>

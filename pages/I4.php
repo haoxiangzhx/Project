@@ -101,9 +101,109 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Add Actor/Movie Relation</h1>
                 </div>
                 <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+<?php
+    include 'db.php';
+    $aid = $_GET["aid"];
+    $mid = $_GET["mid"];
+    $role = $_GET["role"];
+
+    $aidErr = $midErr = $roleErr = "";
+    $error=false;
+    if(isset($_GET["submit"])){
+        if(!$aid){
+            $aidErr = "<p class=\"text-danger\">* Please choose a actor</p>";
+            $error = true;
+        }
+        if (!$mid){
+            $midErr = "<p class=\"text-danger\">* Please choose a movie</p>";
+            $error = true;
+        }
+        if(!$role){
+            $roleErr = "<p class=\"text-danger\">* Please enter a role</p>";
+            $error = true;
+        }
+
+        if(!$error){
+            echo "<div class=\"alert alert-success\"><strong>Success!</strong> The relation has been added to the database.</div>";
+            function add_quotes($str)
+            {
+                return "\"".$str."\"";
+            }
+            $query = "insert into MovieActor values(".$mid.", ".$aid.", ".add_quotes($role).");";
+            $rs=$db->query($query);
+        }
+    }
+?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Add Actor/Movie Relation
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form">
+                                        <div class="from-group">
+                                            <label>Actor</label>
+                                            <select class="form-control" name="aid">
+                                            <option selected disabled>Choose here</option>
+<?php
+    $rs = $db->query("select id, last, first, dob from Actor order by last, first;");
+    while($row = $rs->fetch_assoc()) 
+    {
+        $id = $row["id"];
+        $first = $row["first"];
+        $last = $row["last"];
+        $dob = $row["dob"];
+        echo "<option value=\"".$id."\">".$first." ".$last."(".$dob.")</option>";
+    }
+    // $rs = $db->query("select id, last, first, dob from Actor order by last, first;");
+    // while($row = $rs->fetch_assoc()){
+    //     $id = $row["id"];
+    //     $first = $row["first"];
+    //     $last = $row["last"];
+    //     $dob = $row["dob"];
+    //     echo "<option value=\"".$id."\">".$first." ".$last."(".$dob.")</option>";
+    // }
+?>
+                                            </select>
+                                            <span class="error"><?php echo $aidErr;?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Movie</label>
+                                            <select class="form-control" name="mid">
+                                            <option selected disabled>Choose here</option>
+<?php 
+    $rs = $db->query("select id, title, year from Movie order by title asc;");
+    while($row = $rs->fetch_assoc()) 
+    {
+        $id = $row["id"];
+        $title = $row["title"];
+        $year = $row["year"];
+        echo "<option value=\"".$id."\">".$title."(".$year.")</option>";
+    }
+ ?>
+                                            </select>
+                                            <span class="error"><?php echo $midErr;?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Role:</label>
+                                            <input class="form-control" name="role">
+                                            <span class="error"><?php echo $roleErr;?></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
+                                        <button type="reset" class="btn btn-default">Reset Button</button>
+                                    <form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
