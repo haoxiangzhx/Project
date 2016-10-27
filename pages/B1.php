@@ -101,11 +101,139 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Show Actor Information</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+<?php
+    include 'db.php';
+    $aid = $_GET["aid"];
 
+    $aidErr="";
+    $error = false;
+    if (isset($_GET["submit"])) {
+        if (!$aid) {
+            $aidErr = "<p class=\"text-danger\">* Please choose a actor</p>";
+            $error = true;
+        }
+    }
+?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Show Actor Information
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form>
+                                        <div class="form-group">
+                                            <label>Actor</label>
+                                            <select class="form-control" name="aid">
+                                            <option selected disabled>Choose here</option>
+<?php
+    $rs = $db->query("select id, last, first, dob from Actor order by last, first;");
+    while($row = $rs->fetch_assoc()) 
+    {
+        $id = $row["id"];
+        $first = $row["first"];
+        $last = $row["last"];
+        $dob = $row["dob"];
+        echo "<option value=\"".$id."\">".$first." ".$last."(".$dob.")</option>";
+    }
+?>
+                                            </select>
+                                            <span class="error"><?php echo $aidErr;?></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
+                                        <button type="reset" class="btn btn-default">Reset Button</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<?php
+    if(isset($_GET["submit"])){
+        if(!$error){
+            function add_quotes($str)
+            {
+                return "\"".$str."\"";
+            }
+
+            $query = "select * from Actor where id = ".$aid.";";
+            $rs = $db->query($query);
+            $fields = $rs->fetch_fields();
+
+            echo "<table border=\"1\">";
+            echo "<tr align=\"center\">";
+            foreach ($fields as $f)
+            {
+                echo "<td><b> ".$f->name." </b></td>";
+            }
+            echo "</tr>";
+
+            while($row = $rs->fetch_assoc()) 
+            {
+                echo "<tr align=\"center\">";
+                foreach ($fields as $f)
+                {
+                    $val = $row[$f->name];
+                    if (!$val)
+                        $val = "N/A";
+                    echo "<td> ".$val."</td>";
+                }
+                echo "</tr>";
+            }
+
+            echo "</table>";
+        }
+    }
+?>
+                </div>
+<?php 
+    if (isset($_GET["submit"])) {
+        if (!$error)
+        {
+            $part1 = "<div class=\"col-lg-12\">
+                    <div class=\"panel panel-default\">
+                        <div class=\"panel-heading\">
+                            Actor's Movies and Role:
+                        </div>
+                        <div class=\"panel-body\">
+                            <div class=\"table-responsive\">
+                                <table class=\"table\">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Role</th>
+                                            <th>Movie Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+            $part2 = "</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
+            $query = "select id, role, title from Movie, MovieActor where aid = ".$aid." and id = mid;";
+            $rs = $db->query($query);
+
+            echo $part1;
+            $i = 1;
+            while($row = $rs->fetch_assoc()) 
+            {
+                $id = $row['id'];
+                $role = $row['role'];
+                $title = $row['title'];
+                echo "<tr><td>".$i++."</td><td>".$role."</td><td><a href=\"B2.php?mid=$id&submit=\">".$title."</a></td></tr>";
+            }
+            echo $part2;
+        }
+    }
+ ?>
+            </div>
         </div>
         <!-- /#page-wrapper -->
 

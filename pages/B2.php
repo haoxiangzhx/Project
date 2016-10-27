@@ -227,17 +227,18 @@
                         </div>
                     </div>
                 </div>";
-            $query = "select last, first, role from Actor, MovieActor where mid = ".$mid." and id = aid order by last, first;";
+            $query = "select id, last, first, role from Actor, MovieActor where mid = ".$mid." and id = aid order by last, first;";
             $rs = $db->query($query);
 
             echo $part1;
             $i = 1;
             while($row = $rs->fetch_assoc()) 
             {
+                $id = $row['id'];
                 $last = $row['last'];
                 $first = $row['first'];
                 $role = $row['role'];
-                echo "<tr><td>".$i++."</td><td>".$first." ".$last."</td><td>".$role."</td></tr>";
+                echo "<tr><td>".$i++."</td><td><a href=\"B1.php?aid=$id&submit=\">".$first." ".$last."</a></td><td>".$role."</td></tr>";
             }
             echo $part2;
         }
