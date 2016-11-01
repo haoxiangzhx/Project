@@ -153,6 +153,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
 <?php
     if(isset($_GET["submit"])){
         if(!$error){
@@ -160,37 +161,49 @@
             {
                 return "\"".$str."\"";
             }
+            $part1 = "<div class=\"col-lg-12\">
+                    <div class=\"panel panel-default\">
+                        <div class=\"panel-heading\">
+                            Actor Information
+                        </div>
+                        <div class=\"panel-body\">
+                            <div class=\"table-responsive\">
+                                <table class=\"table\">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Sex</th>
+                                            <th>Date of Birth</th>
+                                            <th>Date of Death</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+            $part2 = "</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
 
             $query = "select * from Actor where id = ".$aid.";";
             $rs = $db->query($query);
-            $fields = $rs->fetch_fields();
-
-            echo "<table border=\"1\">";
-            echo "<tr align=\"center\">";
-            foreach ($fields as $f)
-            {
-                echo "<td><b> ".$f->name." </b></td>";
-            }
-            echo "</tr>";
-
-            while($row = $rs->fetch_assoc()) 
-            {
-                echo "<tr align=\"center\">";
-                foreach ($fields as $f)
-                {
-                    $val = $row[$f->name];
-                    if (!$val)
-                        $val = "N/A";
-                    echo "<td> ".$val."</td>";
-                }
-                echo "</tr>";
+            $row = $rs->fetch_assoc();
+            $first = $row['first'];
+            $last = $row['last'];
+            $sex = $row['sex'];
+            $dob = $row['dob'];
+            $dod = $row['dod'];
+            $actor = $first." ".$last;
+            if (!$dod){
+                $dod = "Still Alive";
             }
 
-            echo "</table>";
+            echo $part1;
+            echo "<tr><td>".$actor."</td><td>".$sex."</td><td>".$dob."</td><td>".$dod."</tr>";
+            echo $part2;
         }
     }
 ?>
-                </div>
 <?php 
     if (isset($_GET["submit"])) {
         if (!$error)
