@@ -117,10 +117,6 @@
     $nameErr = $midErr = $ratingErr = $commentErr = "";
     $error = false;
     if (isset($_GET["submit"])) {
-        if (!$name) {
-            $nameErr = "<p class=\"text-danger\">* Your name is required</p>";
-            $error = true;
-        }
         if (!$mid) {
             $midErr = "<p class=\"text-danger\">* Please choose a movie</p>";
             $error = true;
@@ -141,6 +137,11 @@
             function add_quotes($str)
             {
                 return "\"".$str."\"";
+            }
+
+            if (!$name)
+            {
+                $name = "Anonymous";
             }
 
             $query = "insert into Review values(".add_quotes($name).", now(), ".$mid.", ".$rating.", ".add_quotes($comment).");";
@@ -201,7 +202,6 @@
                                         <div class="form-group">
                                             <label>Your Name</label>
                                             <input class="form-control" name="name">
-                                            <span class="error"><?php echo $nameErr;?></span>
                                         </div>
                                         <button type="submit" class="btn btn-default" name="submit">Submit Button</button>
                                         <button type="reset" class="btn btn-default">Reset Button</button>
