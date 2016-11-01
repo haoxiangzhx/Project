@@ -101,7 +101,22 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Welcome</h1>
+                        <div class="panel panel-info" style="max-width:800px;margin-left:auto; margin-right:auto;">
+                        <div class="panel-heading">
+                            
+                        </div>
+                        <div class="panel-body">
+                            <h3 align="center">Welcome to CS 143 Project 1C Movie Database!</h3><br>
+                            <ul>
+                                <h4><li>This database is created by Shuang Wang and Haoxiang Zhang.</li></h4>
+                                <h4><li>You can add actor/director/movie infomation, search and browse actor/movie information and add review for a movie.</li></h4>
+                                <h4><li>Click on the side bar and get started!</li></h4>
+                            </ul>
+                            <p>
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
