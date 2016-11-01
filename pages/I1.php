@@ -149,15 +149,20 @@
             $row = $rs->fetch_assoc();
             $id = $row['id'];
 
+
             function add_quotes($str)
             {
                 return "\"".$str."\"";
             }
 
-            $query = "insert into ".$occupation." values(".$id.", ".add_quotes($last).", ".add_quotes($first).", ".add_quotes($sex).", ".add_quotes($dob).", ";
+            if($occupation == "Actor"){
+                $query = "insert into ".$occupation." values(".$id.", ".add_quotes($last).", ".add_quotes($first).", ".add_quotes($sex).", ".add_quotes($dob).", ";
+            }
+            else{
+                $query = "insert into ".$occupation." values(".$id.", ".add_quotes($last).", ".add_quotes($first).", ".add_quotes($dob).", ";
+            }
             if ($dod != "")
             {
-                echo "$dod";
                 $query .= add_quotes($dod).");";
             }
             else
@@ -165,6 +170,7 @@
                 $query .= "null);";
             }
             $rs = $db->query($query);
+
         }
     }
  ?>
