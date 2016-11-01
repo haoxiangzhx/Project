@@ -156,51 +156,76 @@
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
 <?php 
     if (isset($_GET["submit"])) {
         if (!$error)
         {
-            function add_quotes($str)
-            {
-                return "\"".$str."\"";
-            }
-
+            $part1 = "<div class=\"col-lg-12\">
+                    <div class=\"panel panel-default\">
+                        <div class=\"panel-heading\">
+                            Movie Information
+                        </div>
+                        <div class=\"panel-body\">
+                            <div class=\"table-responsive\">
+                                <table class=\"table\">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Director</th>
+                                            <th>Genre</th>
+                                            <th>Year</th>
+                                            <th>Rating</th>
+                                            <th>Company</th>
+                                            <th>Average Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+            $part2 = "</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
             $query = "select * from Movie where id = ".$mid.";";
             $rs = $db->query($query);
-            // $row = $rs->fetch_assoc();
-            // $title = $row['title'];
-            // $year = $row['year'];
-            // $rating = $row['rating'];
-            // $company = $row['company'];
-            $fields = $rs->fetch_fields();
-
-            echo "<table border=\"1\">";
-            echo "<tr align=\"center\">";
-            foreach ($fields as $f)
+            $row = $rs->fetch_assoc();
+            $title = $row['title'];
+            $year = $row['year'];
+            $rating = $row['rating'];
+            $company = $row['company'];
+            $query = "select last, first from Director, MovieDirector where mid = ".$mid." and id = did";
+            $rs = $db->query($query);
+            $row = $rs->fetch_assoc();
+            $director = $row['first']." ".$row['last'];
+            if ($director == " ")
             {
-                echo "<td><b> ".$f->name." </b></td>";
+                $director = "N/A";
             }
-            echo "</tr>";
-
-            while($row = $rs->fetch_assoc()) 
+            $query = "select genre from MovieGenre where mid = ".$mid.";";
+            $rs = $db->query($query);
+            $row = $rs->fetch_assoc();
+            $genre = $row['genre'];
+            if (!$genre)
             {
-                echo "<tr align=\"center\">";
-                foreach ($fields as $f)
-                {
-                    $val = $row[$f->name];
-                    if (!$val)
-                        $val = "N/A";
-                    echo "<td> ".$val."</td>";
-                }
-                echo "</tr>";
+                $genre = "N/A";
+            }
+            $query = "select avg(rating) from Review where mid = ".$mid.";";
+            $rs = $db->query($query);
+            $row = $rs->fetch_assoc();
+            $avg = $row['avg(rating)'];
+            if (!$avg)
+            {
+                $avg = "N/A";
             }
 
-            echo "</table>";
+            echo $part1;
+            echo "<tr><td>".$title."</td><td>".$director."</td><td>".$genre."</td><td>".$year."</td><td>".$rating."</td><td>".$company."</td><td>".$avg."</tr>";
+            echo $part2;
         }
     }
  ?>
-                </div>
-                <!-- /.col-lg-12 -->
 <?php 
     if (isset($_GET["submit"])) {
         if (!$error)
@@ -271,7 +296,7 @@
                 $comment = $row['comment'];
                 echo $part1.$time.$part2.$comment.$part3."--".$name.$part4;
             }
-
+            echo "<a class=\"btn btn-outline btn-primary btn-lg\" type=\"button\" href=\"I3.php\">Add Movie Review</a>";
         }
     }
  ?>
